@@ -14,7 +14,12 @@ echo "* soft nofile 10000" | sudo tee -a /etc/security/limits.conf > /dev/null
 echo "* hard nofile 10000" | sudo tee -a /etc/security/limits.conf > /dev/null
 sudo sysctl -p
 
-echo "Enabling NTP"
+echo "Enabling NTP - change if you are not in North America"
+sudo sed -i '/server .*/d' /etc/ntpd.conf
+echo "server 0.north-america.pool.ntp.org" | sudo tee -a /etc/ntp.conf > /dev/null
+echo "server 1.north-america.pool.ntp.org" | sudo tee -a /etc/ntp.conf > /dev/null
+echo "server 2.north-america.pool.ntp.org" | sudo tee -a /etc/ntp.conf > /dev/null
+echo "server 3.north-america.pool.ntp.org" | sudo tee -a /etc/ntp.conf > /dev/null
 sudo systemctl enable ntpd
 sudo systemctl start ntpd
 
@@ -35,19 +40,14 @@ then
 fi
 source /etc/profile.d/java.sh
 
-echo "Creating user for installation"
-sudo useradd -m -c "hdp" hdp -s /bin/bash
-sudo gpasswd -a hdp wheel
-
-# create a passwordless logon for installation user
-USER_HOME=/home/hdp
-sudo -u hdp mkdir $USER_HOME/.ssh
+echo "Setting up root user for passwordless access"
+USER_HOME=/root
+sudo  mkdir $USER_HOME/.ssh
 sudo chmod 700 $USER_HOME/.ssh
-sudo -u hdp ssh-keygen -t dsa -P '' -f $USER_HOME/.ssh/id_dsa
-sudo -u hdp bash -c "cat $USER_HOME/.ssh/id_dsa.pub >> $USER_HOME/.ssh/authorized_keys"
-sudo -u hdp bash -c "ssh-keyscan -H localhost >> $USER_HOME/.ssh/known_hosts"
+sudo  ssh-keygen -t dsa -P '' -f $USER_HOME/.ssh/id_dsa
+sudo  bash -c "cat $USER_HOME/.ssh/id_dsa.pub >> $USER_HOME/.ssh/authorized_keys"
+sudo  bash -c "ssh-keyscan -H localhost >> $USER_HOME/.ssh/known_hosts"
 sudo chmod 600 $USER_HOME/.ssh/authorized_keys
-echo "Created user 'hdp' for running application."
 
 echo "Configuring Yum repos"
 sudo wget -nv http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.1.1/ambari.repo -O /etc/yum.repos.d/ambari.repo
