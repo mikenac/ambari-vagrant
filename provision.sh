@@ -50,7 +50,7 @@ sudo  bash -c "ssh-keyscan -H localhost >> $USER_HOME/.ssh/known_hosts"
 sudo chmod 600 $USER_HOME/.ssh/authorized_keys
 
 echo "Configuring Yum repos"
-sudo wget -nv http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.1.1/ambari.repo -O /etc/yum.repos.d/ambari.repo
+sudo wget -nv http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.4.2.0/ambari.repo -O /etc/yum.repos.d/ambari.repo 
 
 echo "Installing Ambari"
 sudo yum -y install ambari-server
