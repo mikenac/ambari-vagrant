@@ -15,7 +15,7 @@ echo "* hard nofile 10000" | sudo tee -a /etc/security/limits.conf > /dev/null
 sudo sysctl -p
 
 echo "Enabling NTP - change if you are not in North America"
-sudo sed -i '/server .*/d' /etc/ntpd.conf
+sudo sed -i '/server .*/d' /etc/ntp.conf
 echo "server 0.north-america.pool.ntp.org" | sudo tee -a /etc/ntp.conf > /dev/null
 echo "server 1.north-america.pool.ntp.org" | sudo tee -a /etc/ntp.conf > /dev/null
 echo "server 2.north-america.pool.ntp.org" | sudo tee -a /etc/ntp.conf > /dev/null
